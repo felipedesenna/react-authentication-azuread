@@ -71,6 +71,25 @@
   color: #61dafb;
 }
 
+.accountinfo {
+  position: absolute;
+  right: 0;
+  margin-right: 10px;
+  top: 0;
+  margin-top: 10px;
+  font-size: 1rem;
+}
+.botao {
+ margin-left: 10px;
+ font-size: 1rem;
+ background-color: #d3d3d3;
+ color: #666;
+}
+.botao:hover {
+ background-color: #ff6600;
+ color: #fff;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
