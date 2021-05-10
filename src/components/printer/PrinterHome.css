@@ -1,0 +1,25 @@
+.navPrinter > a {
+  text-decoration: none;
+  color: white;
+  font-variant-caps: all-small-caps;
+  font-size: x-large;
+}
+.navPrinter:hover {
+  text-decoration: none;
+  background-color: #ff6600;
+  color: white;
+  font-variant-caps: all-small-caps;
+  font-size: x-large;
+}
+
+div.card {
+    background-color: #666;
+}
+
+header {
+    max-height: 100px;
+}
+
+.card {
+    padding: 0;
+}

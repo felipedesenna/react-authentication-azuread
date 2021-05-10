@@ -18,5 +18,6 @@ export default props =>
         <Link to="/printers">
             <Hi.HiOutlinePrinter/> Impressoras
         </Link>
+       
     </nav>
 </aside>

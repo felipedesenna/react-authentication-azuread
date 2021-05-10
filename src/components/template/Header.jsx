@@ -26,8 +26,8 @@ const Dashboard = (props) => {
           </p>
         </div>
       </h1>
-
       <p className="lead text-muted">{props.subtitle}</p>
+           
     </header>
   );
 };
