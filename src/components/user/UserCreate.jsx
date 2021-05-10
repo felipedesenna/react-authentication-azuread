@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Main from '../template/Main'
-import { AiOutlineUserAdd } from "react-icons/ai";
+import * as Hi  from "react-icons/hi";
+
 
 
 const headerProps = {
-    icon: <AiOutlineUserAdd className="icon" />,
+    icon: <Hi.HiOutlineUserAdd className="icon" />,
     title: 'Criar Usuário',
     subtitle: 'Cadastro de usuários: Incluir, Listar, Alterar e Excluir'
 }

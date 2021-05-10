@@ -2,17 +2,21 @@
 import './Nav.css'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { AiOutlineUserAdd, AiOutlineHome }  from "react-icons/ai";
+import * as Hi  from "react-icons/hi";
+import * as Bs from "react-icons/bs";
 
 export default props =>
 <aside className="menu-area">
     <nav className="menu">
         {/* Refatorar em casa! */}
         <Link to="/dashboard">
-            <AiOutlineHome/> Início
+            <Hi.HiOutlineHome/> Início
         </Link>
         <Link to="/create">
-            <AiOutlineUserAdd/> Usuários
+            <Hi.HiOutlineUserAdd/>  Usuários
+        </Link>
+        <Link to="/printers">
+            <Hi.HiOutlinePrinter/> Impressoras
         </Link>
     </nav>
 </aside>

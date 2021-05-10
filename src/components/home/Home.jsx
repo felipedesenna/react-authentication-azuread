@@ -1,10 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import React from 'react'
 import Main from '../template/Main'
-import { AiOutlineHome } from "react-icons/ai";
+import * as Hi  from "react-icons/hi";
 
 const headerProps = {
-    icon: <AiOutlineHome className="icon" />,
+    icon: <Hi.HiOutlineHome className="icon" />,
     title: 'Início',
     subtitle: 'Segundo Projeto do capítulo de React.'
 }

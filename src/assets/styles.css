@@ -3,9 +3,9 @@
   background: rgb(122, 49, 0);
   background: linear-gradient(
     30deg,
-    rgba(122, 49, 0, 1) 0%,
-    rgba(143, 57, 0, 1) 35%,
-    rgba(255, 102, 0, 1) 100%
+    #7a3100 0%,
+    #8f3900 35%,
+    #ff6600 100%
   );
   height: 100vh;
   display: flex;
@@ -20,11 +20,11 @@
   padding: 10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   .App .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 .App button {
   height: 30px;
@@ -32,16 +32,18 @@
   border-radius: 3px;
   border: none;
   background-image: "../assets/logo.svg";
-  background: #ff6600;
-  color: #fff;
+  background: #d3d3d3;
+  color: #666;
   font-size: 17px;
   margin-top: 10px;
+  font-weight: 600;
 }
 
 .App button:hover {
   cursor: pointer;
-  background: #fff;
-  color: #61dafb;
+  background: #ff6600;
+  color: #d3d3d3;
+  font-weight: 600;
 }
 
 .App h1 {
@@ -99,11 +101,11 @@
   color: #fff;
 }
 
-@keyframes App-logo-spin {
+/* @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+} */
