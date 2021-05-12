@@ -15,12 +15,13 @@ export default function (props) {
       </React.Fragment>
     );
   } else {
+    
     return (
       <main>
         <React.Fragment>
           <Header {...props} />
           <main className="content container-fluid">
-            <div className="p-3 mt-3">{props.navbar}</div>
+            <div className="p-3 mt-3">{props.children.navbar}</div>
           </main>
         </React.Fragment>
         <React.Fragment>

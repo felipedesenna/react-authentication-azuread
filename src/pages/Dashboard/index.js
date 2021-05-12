@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/auth';
 import logo from '../../assets/logo.svg';
 import './index.css'
 import '../../assets/styles.css';
+import '../../assets/custom.scss';
 
 import Routes from '../../routes/RoutesAuth'
 import Logo from '../../components/template/Logo'
