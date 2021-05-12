@@ -1,10 +1,12 @@
 /* eslint-disable react/style-prop-object */
 import React, { Component, useState } from "react";
 import { Button, Card, Nav, Navbar, NavDropdown, Toast } from "react-bootstrap";
+import { ToastContainer, toast, Zoom, Bounce } from "react-toastify";
 import { Link } from "react-router-dom";
 import "./PrinterHome.css";
 import axios from "axios";
 import Main from "../template/Main";
+import ToastNotifications from "../Notifications/NotificationProvider";
 import * as Hi from "react-icons/hi";
 
 const headerProps = {
@@ -220,7 +222,7 @@ export default class PrinterHome extends Component {
               </button>
               <button
                 className="btn btn-secondary ml-2"
-                onClick={() => <Example />}
+                onclick={(e) => this.notifyApp(e)}
               >
                 Cancelar
               </button>
@@ -232,18 +234,11 @@ export default class PrinterHome extends Component {
   }
   // ----------------------------------------------------- //
 
-  toast() {
-    return (
-      <Toast>
-        <Toast.Header>
-          <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-          <strong className="mr-auto">Bootstrap</strong>
-          <small>11 mins ago</small>
-        </Toast.Header>
-        <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
-      </Toast>
-    );
+  notifyApp() {
+    toast.success("Sucesso");
+    return <ToastContainer />;
   }
+
   screenSwitcher() {
     switch (this.state.active) {
       case "default":
@@ -263,24 +258,10 @@ export default class PrinterHome extends Component {
     return (
       <Main {...headerProps}>
         {this.navBar()}
+        {this.notifyApp()}
 
         {this.screenSwitcher()}
       </Main>
     );
   }
-}
-
-function Example() {
-  const [show, setShow] = useState(true);
-
-  return (
-    <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
-      <Toast.Header>
-        <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-        <strong className="mr-auto">Bootstrap</strong>
-        <small>11 mins ago</small>
-      </Toast.Header>
-      <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
-    </Toast>
-  );
 }
