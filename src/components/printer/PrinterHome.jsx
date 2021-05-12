@@ -33,7 +33,7 @@ export default class PrinterHome extends Component {
     });
   }
 
-  // Barra de Navegação //
+  // Barra de Navegação teste//
 
   navBar() {
     console.log();
@@ -220,7 +220,7 @@ export default class PrinterHome extends Component {
               </button>
               <button
                 className="btn btn-secondary ml-2"
-                onClick={() => <Example/> }
+                onClick={() => <Example />}
               >
                 Cancelar
               </button>
