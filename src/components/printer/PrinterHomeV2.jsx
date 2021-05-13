@@ -1,5 +1,5 @@
 /* eslint-disable react/style-prop-object */
-import React, { hashHistory, useState } from "react";
+import React, { hashHistory, useState, useRef } from "react";
 import {
   Button,
   Card,
@@ -13,7 +13,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import "./PrinterHome.css";
-import axios from "axios";
+import * as APIConn from "../api/ApiConnector";
 import Main from "../template/Main";
 import Toast, { ContainerToast } from "../Notifications/NotificationProvider";
 import * as Hi from "react-icons/hi";
@@ -69,34 +69,46 @@ const Navigation = () => {
   );
 };
 
-const toastTest = (msg) => {
-  return Toast("oie");
-};
 
 const Screen2 = (event) => {
   const [validated, setValidated] = useState(false);
+  const formRef = useRef(null);
   const [state, setState] = useState();
   const [sn, setSN] = useState();
   const [model, setModel] = useState();
   const [manufacturer, setManufacturer] = useState();
   const [type, setType] = useState();
+
+
   const handleSubmit = (event) => {
     const addFormLog = { sn, model, manufacturer, type };
-    console.log(addFormLog);
+    console.log(addFormLog, validated);
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-      Toast({ type: "error", msg: "Preencha todos os campos!" });
+      setValidated(true);
+      Toast({ type: "error", msg: "Preencha todos os campos", i: Ri.RiCloseCircleFill });
+    } else {
+      setValidated(true);
+      event.preventDefault();
+      Toast({ type: "success", msg: "Cadastro efetuado", i: Ri.RiCheckboxCircleFill });
+      handleReset()
+      APIConn.save({ path: "printers", obj: addFormLog })
+      
     }
-
-    setValidated(true);
   };
+
+  const handleReset = () => {
+    formRef.current.reset();
+    setValidated(false);
+  };
+
 
   return (
     <>
       <hr />
-      <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
+      <Form ref={formRef} noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
         <Form.Row>
           <Form.Group as={Col} md="6" controlId="sn">
             <Form.Label>S/N</Form.Label>
