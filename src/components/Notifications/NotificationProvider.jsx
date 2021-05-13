@@ -25,6 +25,37 @@ const customToast = (msg, i) => {
   );
 };
 
+const axiosSuccess = (msg, i) => {
+  toast.success(customToast(msg, i), {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    transition: Bounce,
+    pauseOnFocusLoss: false,
+    draggable: false,
+    closeButton: false
+  });
+};
+const axiosError = (msg, i) => {
+  toast.error(customToast(msg, i), {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    transition: Bounce,
+    pauseOnFocusLoss: false,
+    draggable: false,
+    closeButton: false
+  });
+};
+
 const success = (msg, i) => {
   toast.success(customToast(msg, i), {
     position: "top-right",
@@ -102,6 +133,12 @@ const notifyApp = ({ type, msg, i }) => {
       break;
     case "error":
       return error(msg, i);
+      break;
+    case "axiosError":
+      return axiosError(msg, i);
+      break;
+    case "axiosSuccess":
+      return axiosSuccess(msg, i);
       break;
 
     default:

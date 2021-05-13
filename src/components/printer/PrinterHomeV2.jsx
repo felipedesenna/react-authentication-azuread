@@ -1,5 +1,5 @@
 /* eslint-disable react/style-prop-object */
-import React, { hashHistory, useState, useRef } from "react";
+import React, { hashHistory, useState, useRef, useEffect } from "react";
 import {
   Button,
   Card,
@@ -9,6 +9,7 @@ import {
   Col,
   InputGroup,
   FormControl,
+  Table,
 } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -21,18 +22,19 @@ import * as Ri from "react-icons/ri";
 
 import Header from "../template/Header";
 
+
 const Navigation = () => {
   const [active, setActive] = useState("default");
 
   const screenSwitcher = () => {
     switch (active) {
       case "default":
-        return <Screen activeKey={active} />;
+        return <Dashboard />;
         break;
 
       case "entrada":
         // return <ToastNotifications message="Oi" />;
-        return <Screen2 />;
+        return <FormEntradaPRT />;
         break;
 
       default:
@@ -49,18 +51,10 @@ const Navigation = () => {
         onSelect={(selectedKey) => setActive(selectedKey)}
       >
         <Nav.Item>
-          <Nav.Link eventKey="default">Default</Nav.Link>
+          <Nav.Link eventKey="default">Dashboard</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="entrada">Link 1</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="link-2">Link 2</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="disabled" disabled>
-            Disabled
-          </Nav.Link>
+          <Nav.Link eventKey="entrada">Entrada</Nav.Link>
         </Nav.Item>
       </Nav>
 
@@ -69,33 +63,41 @@ const Navigation = () => {
   );
 };
 
-
-const Screen2 = (event) => {
+const FormEntradaPRT = (event) => {
   const [validated, setValidated] = useState(false);
   const formRef = useRef(null);
-  const [state, setState] = useState();
   const [sn, setSN] = useState();
   const [model, setModel] = useState();
   const [manufacturer, setManufacturer] = useState();
   const [type, setType] = useState();
 
-
   const handleSubmit = (event) => {
     const addFormLog = { sn, model, manufacturer, type };
-    console.log(addFormLog, validated);
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
-      Toast({ type: "error", msg: "Preencha todos os campos", i: Ri.RiCloseCircleFill });
+      Toast({
+        type: "error",
+        msg: "Preencha todos os campos",
+        i: Ri.RiCloseCircleFill,
+      });
     } else {
       setValidated(true);
       event.preventDefault();
-      Toast({ type: "success", msg: "Cadastro efetuado", i: Ri.RiCheckboxCircleFill });
-      handleReset()
-      APIConn.save({ path: "printers", obj: addFormLog })
-      
+      APIConn.savePrt({ path: "printers", obj: addFormLog })
+        .then((res) => {
+          axiosToast(res.data);
+        })
+        .catch((e) => {
+          Toast({
+            type: "error",
+            msg: "Bad Request",
+            i: Ri.RiCloseCircleFill,
+          });
+          console.log(e);
+        });
     }
   };
 
@@ -104,11 +106,39 @@ const Screen2 = (event) => {
     setValidated(false);
   };
 
+  const axiosToast = (res) => {
+    switch (res.statusCode) {
+      case 110:
+        Toast({
+          type: "success",
+          msg: `Equipamento cadastrado com sucesso`,
+          i: Ri.RiCheckboxCircleFill,
+        });
+        handleReset();
+        break;
+      case 111:
+        Toast({
+          type: "error",
+          msg: `Equipamento '${res.printer.sn}' já consta cadastrado na base`,
+          i: Ri.RiErrorWarningFill,
+        });
+        break;
+
+      default:
+        return null;
+        break;
+    }
+  };
 
   return (
     <>
       <hr />
-      <Form ref={formRef} noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
+      <Form
+        ref={formRef}
+        noValidate
+        validated={validated}
+        onSubmit={(e) => handleSubmit(e)}
+      >
         <Form.Row>
           <Form.Group as={Col} md="6" controlId="sn">
             <Form.Label>S/N</Form.Label>
@@ -117,7 +147,6 @@ const Screen2 = (event) => {
               required
               onChange={(e) => {
                 setSN(e.target.value);
-                console.log(e.target.value);
               }}
               placeholder="Digite o S/N..."
             />
@@ -129,7 +158,6 @@ const Screen2 = (event) => {
               required
               onChange={(e) => {
                 setModel(e.target.value);
-                console.log(e.target.value);
               }}
               placeholder="Digite o Modelo..."
             />
@@ -143,7 +171,6 @@ const Screen2 = (event) => {
               required
               onChange={(e) => {
                 setManufacturer(e.target.value);
-                console.log(e.target.value);
               }}
               placeholder="Digite o Fabricante..."
             />
@@ -155,7 +182,6 @@ const Screen2 = (event) => {
               required
               onChange={(e) => {
                 setType(e.target.value);
-                console.log(e.target.value);
               }}
               placeholder="Digite o Tipo..."
             />
@@ -168,7 +194,7 @@ const Screen2 = (event) => {
   );
 };
 
-export const Screen = (props) => {
+const Screen = (props) => {
   const [active, setActive] = useState("default");
   return (
     <>
@@ -249,6 +275,75 @@ export const Screen = (props) => {
   );
 };
 
+const example = 1
+
+const Dashboard = (event) => {
+  const [list, setList] = useState();
+  const lista = []
+  lista.push(list)
+  useEffect(() => {
+    prtListAPI();
+  },[]);
+
+  const prtListAPI = () => {
+    APIConn.getPrtList({ path: "printers" })
+      .then((res) => {
+        setList(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const consoleTeste = () => {
+    console.log(list);
+  };
+
+  const renderRows = (player, index) => {
+          
+         return (
+        <tr key={index}>
+          <td>{list.id}</td>
+          <td>{list.sn}</td>
+          <td>{list.model}</td>
+          <td>{list.manufacturer}</td>
+          <td>
+            <button className="btn btn-warning" >
+              <i className="fa fa-pencil"></i>
+            </button>
+            <button className="btn btn-danger ml-2" >
+              <i className="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      );
+  
+  };
+
+  const renderPlayer = (player, index) => {
+    console.log(index, player)
+  }
+
+  return (
+    <>
+      <Table className="mt-3" responsive>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>S/N</th>
+            <th>Modelo</th>
+            <th>Fabricante</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </Table>
+      <Button onClick={console.log(list)}>Clicar</Button>
+    </>
+  );
+
+};
 const PrinterHomeV2 = () => {
   const headerProps = {
     icon: <Hi.HiOutlinePrinter className="icon" />,
