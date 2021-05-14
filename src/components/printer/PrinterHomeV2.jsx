@@ -275,15 +275,11 @@ const Screen = (props) => {
   );
 };
 
-const example = 1
-
 const Dashboard = (event) => {
-  const [list, setList] = useState();
-  const lista = []
-  lista.push(list)
+  const [list, setList] = useState([]);
   useEffect(() => {
     prtListAPI();
-  },[]);
+  }, []);
 
   const prtListAPI = () => {
     APIConn.getPrtList({ path: "printers" })
@@ -293,31 +289,44 @@ const Dashboard = (event) => {
       .catch((e) => {
         console.log(e);
       });
+      //Toast carregando
   };
-
+  const arr = [
+    {
+      "id": 8,
+      "isSelected": true,
+      "model": "leite condensado",
+    },
+    {
+      "id": 9,
+      "isSelected": true,
+      "model": "creme de leite",
+    },
+  ]
   const consoleTeste = () => {
     console.log(list);
+
   };
 
-  const renderRows = (player, index) => {
-          
-         return (
-        <tr key={index}>
-          <td>{list.id}</td>
-          <td>{list.sn}</td>
-          <td>{list.model}</td>
-          <td>{list.manufacturer}</td>
-          <td>
-            <button className="btn btn-warning" >
-              <i className="fa fa-pencil"></i>
-            </button>
-            <button className="btn btn-danger ml-2" >
-              <i className="fa fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      );
-  
+  const renderRows = (list, index) => {
+
+    return (
+      <tr key={index}>
+        <td>{list.id}</td>
+        <td>{list.sn}</td>
+        <td>{list.model}</td>
+        <td>{list.manufacturer}</td>
+        <td>
+          <button className="btn btn-warning" >
+            <i className="fa fa-pencil"></i>
+          </button>
+          <button className="btn btn-danger ml-2" >
+            <i className="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    );
+
   };
 
   const renderPlayer = (player, index) => {
@@ -337,9 +346,11 @@ const Dashboard = (event) => {
           </tr>
         </thead>
         <tbody>
+          {/* {list && list.map(renderRows)} */}
+          {list.map(renderRows)}
         </tbody>
       </Table>
-      <Button onClick={console.log(list)}>Clicar</Button>
+      <Button onClick={consoleTeste}>Clicar</Button>
     </>
   );
 
