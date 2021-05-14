@@ -18,6 +18,14 @@ export const getPrtList = (props) => {
   return axios[method](url);
 };
 
+export const deletePrt = (props) => {
+  const baseUrl = `http://localhost:3333/${props.path}/${props.id}`;
+  const method = "delete"
+  const url = baseUrl;
+  return axios[method](url);
+  console.log(props)
+};
+
 // export const save = (props) => {
 //   const baseUrl = `http://localhost:3333/${props.path}/`;
 //   const printer = props.obj;

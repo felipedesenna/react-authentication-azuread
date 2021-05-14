@@ -16,12 +16,14 @@ import { Link } from "react-router-dom";
 import "./PrinterHome.css";
 import * as APIConn from "../api/ApiConnector";
 import Main from "../template/Main";
-import Toast, { ContainerToast } from "../Notifications/NotificationProvider";
+import Toast, {
+  axiosToast,
+  axiosToastUpdate,
+} from "../Notifications/NotificationProvider";
 import * as Hi from "react-icons/hi";
 import * as Ri from "react-icons/ri";
 
 import Header from "../template/Header";
-
 
 const Navigation = () => {
   const [active, setActive] = useState("default");
@@ -126,7 +128,6 @@ const FormEntradaPRT = (event) => {
 
       default:
         return null;
-        break;
     }
   };
 
@@ -277,6 +278,8 @@ const Screen = (props) => {
 
 const Dashboard = (event) => {
   const [list, setList] = useState([]);
+  const toastId = useRef(null);
+
   useEffect(() => {
     prtListAPI();
   }, []);
@@ -285,31 +288,52 @@ const Dashboard = (event) => {
     APIConn.getPrtList({ path: "printers" })
       .then((res) => {
         setList(res.data);
+        setTimeout(
+          axiosToastUpdate({
+            tstId: toastId,
+            msg: `Carreguei`,
+            i: Ri.RiCheckboxCircleFill,
+          }),
+          1000
+        );
       })
       .catch((e) => {
         console.log(e);
       });
-      //Toast carregando
+    //Toast carregando
+    axiosToast({
+      tstId: toastId,
+      msg: `Carregando lista...`,
+      i: Ri.RiLoader2Fill,
+    });
   };
-  const arr = [
-    {
-      "id": 8,
-      "isSelected": true,
-      "model": "leite condensado",
-    },
-    {
-      "id": 9,
-      "isSelected": true,
-      "model": "creme de leite",
-    },
-  ]
-  const consoleTeste = () => {
-    console.log(list);
 
+  const delPrtAPI = (prt) => {
+    APIConn.deletePrt({ path: "printers", ...prt })
+      .then((res) => {
+        axiosToastUpdate({
+          tstId: toastId,
+          msg: `Item Removido`,
+          i: Ri.RiCheckboxCircleFill,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    //Toast carregando
+    axiosToast({
+      tstId: toastId,
+      msg: `Removendo item...`,
+      i: Ri.RiLoader2Fill,
+    });
+  };
+
+  const consoleTeste = (obj) => {
+    alert(obj);
+    console.log(obj);
   };
 
   const renderRows = (list, index) => {
-
     return (
       <tr key={index}>
         <td>{list.id}</td>
@@ -317,25 +341,23 @@ const Dashboard = (event) => {
         <td>{list.model}</td>
         <td>{list.manufacturer}</td>
         <td>
-          <button className="btn btn-warning" >
+          <button className="btn btn-warning">
             <i className="fa fa-pencil"></i>
           </button>
-          <button className="btn btn-danger ml-2" >
+          <button
+            className="btn btn-danger ml-2"
+            onClick={() => delPrtAPI(list)}
+          >
             <i className="fa fa-trash"></i>
           </button>
         </td>
       </tr>
     );
-
   };
-
-  const renderPlayer = (player, index) => {
-    console.log(index, player)
-  }
 
   return (
     <>
-      <Table className="mt-3" responsive>
+      <Table className="mt-3" striped bordered hover size="sm">
         <thead>
           <tr>
             <th>#</th>
@@ -353,8 +375,8 @@ const Dashboard = (event) => {
       <Button onClick={consoleTeste}>Clicar</Button>
     </>
   );
-
 };
+
 const PrinterHomeV2 = () => {
   const headerProps = {
     icon: <Hi.HiOutlinePrinter className="icon" />,

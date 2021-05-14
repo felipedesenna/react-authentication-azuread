@@ -147,12 +147,14 @@ export default class PrinterHome extends Component {
       this.setState({ printer: initialState.printer, list });
     });
   }
+
   remove(printer) {
     axios.delete(`${baseUrl}/${printer.id}`).then((resp) => {
       const list = this.getUpdatedList(printer, false);
       this.setState({ list });
     });
   }
+  
   renderForm() {
     return (
       <>
