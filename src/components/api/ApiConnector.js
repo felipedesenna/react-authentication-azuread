@@ -23,8 +23,25 @@ export const deletePrt = (props) => {
   const method = "delete"
   const url = baseUrl;
   return axios[method](url);
-  console.log(props)
 };
+
+export const alterPrt = (props) => {
+  const baseUrl = `http://localhost:3333/${props.path}/${props.id}/alter`;
+  const printer = props.obj;
+  const method = "put"
+  const url = baseUrl;
+  return axios[method](url, printer);
+};
+
+export const replacePrt = (props) => {
+  const baseUrl = `http://localhost:3333/${props.path}/${props.id}/replace`;
+  const printer = props.obj;
+  const method = "put"
+  const url = baseUrl;
+  return axios[method](url, printer);
+};
+
+
 
 // export const save = (props) => {
 //   const baseUrl = `http://localhost:3333/${props.path}/`;

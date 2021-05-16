@@ -21,7 +21,6 @@ import Toast, {
   axiosToastUpdate,
 } from "../Notifications/NotificationProvider";
 import Modal, { MyVerticallyCenteredModal } from "./modals/PrinterEditModal"
-import { PrtModOptions } from "./modals/PrinterOptionsModal"
 import * as Hi from "react-icons/hi";
 import * as Ri from "react-icons/ri";
 import { toast } from "react-toastify";
@@ -290,8 +289,7 @@ const Screen = (props) => {
 const Dashboard = (event) => {
   const [list, setList] = useState([]);
   const [prt, setPrt] = useState({});
-  const [prtModEditShow, setPrtModEditShow] = React.useState(false);
-  const [prtOptEditShow, setPrtOptEditShow] = React.useState(false);
+  const [modalShow, setModalShow] = React.useState(false);
   const toastId = useRef(null);
 
   useEffect(() => {
@@ -353,13 +351,13 @@ const Dashboard = (event) => {
   };
 
   const consoleTeste = (obj) => {
-    alert(prtModEditShow);
+    alert(modalShow);
     console.log(obj);
 
     return (
       <MyVerticallyCenteredModal
-        show={prtModEditShow}
-        onHide={() => setPrtModEditShow(false)}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
       />
     )
   };
@@ -372,26 +370,15 @@ const Dashboard = (event) => {
         <td>{list.model}</td>
         <td>{list.manufacturer}</td>
         <td>
-
-          <button
-            className="btn btn-outline-primary mr-2"
+          <button className="btn btn-warning"
             onClick={() => {
-              setPrtOptEditShow(true)
-              setPrt(list)
-            }}
-          >
-            <i className="fa fa-wrench"></i>
-          </button>
-          <button
-            className="btn btn-outline-primary"
-            onClick={() => {
-              setPrtModEditShow(true)
+              setModalShow(true)
               setPrt(list)
             }}>
             <i className="fa fa-pencil"></i>
           </button>
           <button
-            className="btn btn-outline-danger ml-2"
+            className="btn btn-danger ml-2"
             onClick={() => delPrtAPI(list)}
           >
             <i className="fa fa-trash"></i>
@@ -419,25 +406,14 @@ const Dashboard = (event) => {
         </tbody>
       </Table>
       <MyVerticallyCenteredModal
-        show={prtModEditShow}
-        onHide={() => setPrtModEditShow(false)}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
         id={prt.id}
         sn={prt.sn}
         model={prt.model}
         manufacturer={prt.manufacturer}
         type={prt.type}
         updList={updPrtListAPI}
-      />
-      <PrtModOptions
-        show={prtOptEditShow}
-        onHide={() => setPrtOptEditShow(false)}
-        id={prt.id}
-        sn={prt.sn}
-        model={prt.model}
-        manufacturer={prt.manufacturer}
-        type={prt.type}
-        updList={updPrtListAPI}
-        prtList={list}
       />
 
     </>

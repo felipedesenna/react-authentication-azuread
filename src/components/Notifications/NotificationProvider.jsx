@@ -11,7 +11,7 @@ const customToast = (msg, i) => {
 
   return (
     <IconContext.Provider
-      value={{ color: "white", className: "global-class-name", size: "2em"}}
+      value={{ color: "white", className: "global-class-name", size: "2em" }}
     >
       <div className="d-flex align-items-center">
         <div className="mr-2 ml-0">
@@ -28,7 +28,7 @@ const spinToast = (msg, i) => {
 
   return (
     <IconContext.Provider
-      value={{ color: "white", className: "global-class-name", size: "2em"}}
+      value={{ color: "white", className: "global-class-name", size: "2em" }}
     >
       <div className="d-flex align-items-center">
         <div className="mr-2 ml-0 fas fa-spin">
@@ -56,9 +56,9 @@ export const axiosToast = ({ tstId, msg, i }) => {
   });
 };
 
-export const axiosToastUpdate = ({ tstId, msg, i }) => {
+export const axiosToastUpdate = ({ tstId, msg, i, type }) => {
   toast.update(tstId.current, {
-    type: toast.TYPE.SUCCESS,
+    type: type,
     autoClose: 3000,
     transition: Flip,
     render: customToast(msg, i),
