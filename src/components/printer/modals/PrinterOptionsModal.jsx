@@ -20,11 +20,36 @@ import "./PrinterOptionsModal.css"
 import PrtReplace from "../components/PrinterReplace"
 
 
+
+
 export const PrtModOptions = (props) => {
-    console.log(props.prtList)
     const [active, setActive] = useState(false);
     const [submit, setSubmit] = useState();
     const [list, setList] = useState([]);
+
+    const LoadPrtReplace = (props) => {
+        console.log(props)
+        if (active === "replace") {
+            if (props.status === 'DEFECT') {
+                return (
+                    <div>
+                        <h4>
+                            Equipamento com defeito, não é possível realizar substituição.
+
+                        </h4>
+                    </div>
+                )
+            } else {
+                return <PrtReplace {...props} />
+            }
+        } else {
+            return null
+        }
+
+
+    }
+
+
 
     return (
         <Modal
@@ -51,7 +76,7 @@ export const PrtModOptions = (props) => {
                             variant="pills"
                             activeKey={active}
                             onSelect={(selectedKey) => setActive(selectedKey)}
-                            >
+                        >
                             <Nav.Item>
                                 <Nav.Link eventKey="replace">Substituição</Nav.Link>
                             </Nav.Item>
@@ -65,7 +90,12 @@ export const PrtModOptions = (props) => {
                     </Card.Header>
                     {active ?
                         <Card.Body>
-                            {active === "replace" ? <PrtReplace {...props} /> : null}
+
+                            <LoadPrtReplace {...props} />
+
+
+
+                            {/* {active === "replace" ? <PrtReplace {...props} /> : null} */}
                         </Card.Body>
                         : null}
                 </Card>

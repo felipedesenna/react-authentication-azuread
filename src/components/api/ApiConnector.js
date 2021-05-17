@@ -36,7 +36,7 @@ export const alterPrt = (props) => {
 export const replacePrt = (props) => {
   const baseUrl = `http://localhost:3333/${props.path}/${props.id}/replace`;
   const printer = props.obj;
-  const method = "put"
+  const method = "post"
   const url = baseUrl;
   return axios[method](url, printer);
 };

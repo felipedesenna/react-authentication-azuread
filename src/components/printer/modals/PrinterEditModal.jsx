@@ -134,13 +134,13 @@ export const FormEditPrt = (props) => {
                 ref={formRef}
                 noValidate
                 validated={validated}
-            onSubmit={(e) => handleSubmit(e)}
+                onSubmit={(e) => handleSubmit(e)}
             >
                 <Form.Row>
                     <Form.Group as={Col} md="6" controlId="sn">
                         <Form.Label>S/N</Form.Label>
                         <Form.Control
-                        readOnly 
+                            readOnly
                             type="text"
                             required
                             onChange={(e) => {
@@ -192,7 +192,7 @@ export const FormEditPrt = (props) => {
                 <hr />
                 <div className="d-flex flex-row-reverse">
                     <Button variant="primary"
-                    type="submit" className="ml-2">Cadastrar</Button>
+                        type="submit" className="ml-2">Cadastrar</Button>
                     <Button variant="secondary"
                         onClick={props.onHide} className="ml-2">Cancelar</Button>
                 </div>

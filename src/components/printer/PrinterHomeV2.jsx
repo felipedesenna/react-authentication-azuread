@@ -298,6 +298,8 @@ const Dashboard = (event) => {
     prtListAPI();
   }, []);
 
+  console.log(prt)
+
   const prtListAPI = () => {
     APIConn.getPrtList({ path: "printers" })
       .then((res) => {
@@ -365,6 +367,7 @@ const Dashboard = (event) => {
   };
 
   const renderRows = (list, index) => {
+    console.log(list)
     return (
       <tr key={index}>
         <td>{list.id}</td>
@@ -436,6 +439,7 @@ const Dashboard = (event) => {
         model={prt.model}
         manufacturer={prt.manufacturer}
         type={prt.type}
+        status={prt.status}
         updList={updPrtListAPI}
         prtList={list}
       />

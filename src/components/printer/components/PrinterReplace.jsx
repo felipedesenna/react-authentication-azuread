@@ -23,29 +23,55 @@ import * as Ri from "react-icons/ri";
 import { toast } from "react-toastify";
 import { range } from 'lodash';
 import "react-datepicker/dist/react-datepicker.css";
+import { useAuth } from "../../../hooks/auth";
+
 
 // const options = range(0, 1000).map(o => `Option ${o.toString()}`);
 
 
 
 const PrtReplace = (props) => {
+    const { accountInfo } = useAuth();
+    console.log(props.prtList)
     const [validated, setValidated] = useState(false);
     const formRef = useRef(null);
     const toastId = useRef(null);
-    const [sn, setSN] = useState();
-    const [model, setModel] = useState();
-    const [manufacturer, setManufacturer] = useState();
-    const [type, setType] = useState();
-    console.log(props)
-    const [singleSelections, setSingleSelections] = useState([]);
-    const [multiSelections, setMultiSelections] = useState([]);
+    const [tkt_glpi, setTktGlpi] = useState();
+    const [date_of_service, setDateOfService] = useState();
+    const [location, setLocation] = useState();
+    const [problem_reported, setProblemReported] = useState();
+    const [sn_printer_installed, setSNPrinterInstalled] = useState([]);
+
+    const status_printer_removed = 'DEFECT'
+    const status_printer_installed = 'PRODUCTION'
+    const last_technician_update = accountInfo.user.email
+
     const prtList = props.prtList
     const lista = prtList.map(sn => sn.sn)
     const options = lista.filter((lista) => lista !== props.sn)
-    console.log(options)
+    const id_printer_installed = prtList.filter(filterByID).map(id => id.id).toString();
+
+    function filterByID(obj) {
+        if ('sn' in obj && obj.sn === sn_printer_installed.toString()) {
+            return true;
+        }
+    }
+
+    console.log()
 
     const handleSubmit = (event) => {
-        const addFormLog = { sn, model, manufacturer, type };
+
+        const addFormLog = {
+            tkt_glpi,
+            date_of_service,
+            location,
+            problem_reported,
+            id_printer_installed,
+            status_printer_removed,
+            status_printer_installed,
+            last_technician_update
+        };
+        console.log(addFormLog)
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
@@ -59,9 +85,13 @@ const PrtReplace = (props) => {
         } else {
             setValidated(true);
             event.preventDefault();
-            APIConn.savePrt({ path: "printers", obj: addFormLog })
+            APIConn.replacePrt({ path: "printers", obj: addFormLog, id: props.id })
                 .then((res) => {
                     switchToast(res.data);
+                    props.updList()
+                    props.onHide()
+
+
                 })
                 .catch((e) => {
                     Toast({
@@ -89,7 +119,7 @@ const PrtReplace = (props) => {
             case 110:
                 axiosToastUpdate({
                     tstId: toastId,
-                    msg: `Equipamento Cadastrado com Sucesso`,
+                    msg: `Substituição realizada com sucesso`,
                     i: Ri.RiCheckboxCircleFill,
                     type: toast.TYPE.SUCCESS
                 });
@@ -130,7 +160,7 @@ const PrtReplace = (props) => {
                             type="text"
                             required
                             onChange={(e) => {
-                                setSN(e.target.value);
+                                setTktGlpi(e.target.value);
                             }}
                             placeholder="Digite o Ticket do GLPI..."
                         />
@@ -141,35 +171,25 @@ const PrtReplace = (props) => {
                             type="date"
                             required
                             onChange={(e) => {
-                                setModel(e.target.value);
+                                setDateOfService(e.target.value);
                             }}
                             placeholder="Digite o Modelo..."
                         />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col} md="6" controlId="sector">
+                    <Form.Group as={Col} md="12" controlId="sector">
                         <Form.Label>Setor</Form.Label>
                         <Form.Control
                             type="text"
                             required
                             onChange={(e) => {
-                                setManufacturer(e.target.value);
+                                setLocation(e.target.value);
                             }}
-                            placeholder="Digite o Fabricante..."
+                            placeholder="Digite o Setor..."
                         />
                     </Form.Group>
-                    <Form.Group as={Col} md="6" controlId="validationCustom04">
-                        <Form.Label>Tipo</Form.Label>
-                        <Form.Control
-                            type="text"
-                            required
-                            onChange={(e) => {
-                                setType(e.target.value);
-                            }}
-                            placeholder="Digite o Tipo..."
-                        />
-                    </Form.Group>
+
                 </Form.Row>
                 <Form.Row>
                     <Form.Group
@@ -179,7 +199,7 @@ const PrtReplace = (props) => {
                         <Form.Control as="textarea" rows={3}
                             required
                             onChange={(e) => {
-                                setType(e.target.value);
+                                setProblemReported(e.target.value);
                             }}
                             placeholder="Descreva o defeito apresentado..." />
                     </Form.Group>
@@ -192,10 +212,10 @@ const PrtReplace = (props) => {
                         <Typeahead
                             id="basic-typeahead-single"
                             labelKey="name"
-                            onChange={setSingleSelections}
+                            onChange={setSNPrinterInstalled}
                             options={options}
                             placeholder="Selecione o S/N do equipamento instalado..."
-                            selected={singleSelections}
+                            selected={sn_printer_installed}
                             inputProps={{ required: true }}
                         />
                     </Form.Group>
