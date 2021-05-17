@@ -14,5 +14,5 @@ export default props =>
 
         <div className="display-4">Bem Vindo!</div>
         <hr />
-        <p className="mb-0">Sistema para criação de contas de rede no Active Directory.</p>
+        <p className="mb-0">Sistema para Gerenciamento do Parque de Equipamentos</p>
     </Main >

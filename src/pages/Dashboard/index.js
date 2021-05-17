@@ -1,17 +1,17 @@
-import React from 'react';
+import React from "react";
 
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from "../../hooks/auth";
 
-import logo from '../../assets/logo.svg';
-import './index.css'
-import '../../assets/styles.css';
-import '../../assets/custom.scss';
+import logo from "../../assets/logo.svg";
+import "./index.css";
+import "../../assets/styles.css";
+import "../../assets/custom.scss";
 
-import Routes from '../../routes/RoutesAuth'
-import Logo from '../../components/template/Logo'
-import Nav from '../../components/template/Nav'
-import Footer from '../../components/template/Footer'
-import { BrowserRouter } from 'react-router-dom';
+import Routes from "../../routes/RoutesAuth";
+import Logo from "../../components/template/Logo";
+import Nav from "../../components/template/Nav";
+import Footer from "../../components/template/Footer";
+import { BrowserRouter } from "react-router-dom";
 
 const Dashboard = () => {
   const { signOut, accountInfo } = useAuth();

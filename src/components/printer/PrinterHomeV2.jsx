@@ -20,15 +20,17 @@ import Toast, {
   axiosToast,
   axiosToastUpdate,
 } from "../Notifications/NotificationProvider";
-import Modal, { MyVerticallyCenteredModal } from "./modals/PrinterEditModal"
-import { PrtModOptions } from "./modals/PrinterOptionsModal"
+import Modal, { MyVerticallyCenteredModal } from "./modals/PrinterEditModal";
+import { PrtModOptions } from "./modals/PrinterOptionsModal";
 import * as Hi from "react-icons/hi";
 import * as Ri from "react-icons/ri";
 import { toast } from "react-toastify";
+import { useAuth } from "../../hooks/auth";
 
 import Header from "../template/Header";
 
 const Navigation = () => {
+  
   const [active, setActive] = useState("default");
 
   const screenSwitcher = () => {
@@ -62,7 +64,6 @@ const Navigation = () => {
           <Nav.Link eventKey="entrada">Entrada</Nav.Link>
         </Nav.Item>
       </Nav>
-
       {screenSwitcher()}
     </>
   );
@@ -70,15 +71,25 @@ const Navigation = () => {
 
 const FormEntradaPRT = (event) => {
   const [validated, setValidated] = useState(false);
+  const { accountInfo } = useAuth();
   const formRef = useRef(null);
   const toastId = useRef(null);
   const [sn, setSN] = useState();
   const [model, setModel] = useState();
   const [manufacturer, setManufacturer] = useState();
   const [type, setType] = useState();
+  const status = "BACKUP";
+  const last_technician_update = accountInfo.user.email;
 
   const handleSubmit = (event) => {
-    const addFormLog = { sn, model, manufacturer, type };
+    const addFormLog = {
+      sn,
+      model,
+      manufacturer,
+      type,
+      status,
+      last_technician_update,
+    };
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -124,7 +135,7 @@ const FormEntradaPRT = (event) => {
           tstId: toastId,
           msg: `Equipamento Cadastrado com Sucesso`,
           i: Ri.RiCheckboxCircleFill,
-          type: toast.TYPE.SUCCESS
+          type: toast.TYPE.SUCCESS,
         });
         handleReset();
         break;
@@ -133,7 +144,7 @@ const FormEntradaPRT = (event) => {
           tstId: toastId,
           msg: `Equipamento '${res.printer.sn}' já consta cadastrado na base`,
           i: Ri.RiAlertFill,
-          type: toast.TYPE.ERROR
+          type: toast.TYPE.ERROR,
         });
         break;
 
@@ -298,7 +309,7 @@ const Dashboard = (event) => {
     prtListAPI();
   }, []);
 
-  console.log(prt)
+  console.log(prt);
 
   const prtListAPI = () => {
     APIConn.getPrtList({ path: "printers" })
@@ -308,8 +319,8 @@ const Dashboard = (event) => {
           tstId: toastId,
           msg: `Lista carregada`,
           i: Ri.RiCheckboxCircleFill,
-          type: toast.TYPE.SUCCESS
-        })
+          type: toast.TYPE.SUCCESS,
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -341,7 +352,7 @@ const Dashboard = (event) => {
           i: Ri.RiCheckboxCircleFill,
           type: toast.TYPE.SUCCESS,
         });
-        updPrtListAPI()
+        updPrtListAPI();
       })
       .catch((e) => {
         console.log(e);
@@ -363,24 +374,24 @@ const Dashboard = (event) => {
         show={prtModEditShow}
         onHide={() => setPrtModEditShow(false)}
       />
-    )
+    );
   };
 
   const renderRows = (list, index) => {
-    console.log(list)
+    console.log(list);
     return (
       <tr key={index}>
         <td>{list.id}</td>
         <td>{list.sn}</td>
         <td>{list.model}</td>
         <td>{list.manufacturer}</td>
+        <td>{list.status}</td>
         <td>
-
           <button
             className="btn btn-outline-primary mr-2"
             onClick={() => {
-              setPrtOptEditShow(true)
-              setPrt(list)
+              setPrtOptEditShow(true);
+              setPrt(list);
             }}
           >
             <i className="fa fa-wrench"></i>
@@ -388,9 +399,10 @@ const Dashboard = (event) => {
           <button
             className="btn btn-outline-primary"
             onClick={() => {
-              setPrtModEditShow(true)
-              setPrt(list)
-            }}>
+              setPrtModEditShow(true);
+              setPrt(list);
+            }}
+          >
             <i className="fa fa-pencil"></i>
           </button>
           <button
@@ -413,6 +425,7 @@ const Dashboard = (event) => {
             <th>S/N</th>
             <th>Modelo</th>
             <th>Fabricante</th>
+            <th>Status</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -443,7 +456,6 @@ const Dashboard = (event) => {
         updList={updPrtListAPI}
         prtList={list}
       />
-
     </>
   );
 };
@@ -452,7 +464,7 @@ const PrinterHomeV2 = () => {
   const headerProps = {
     icon: <Hi.HiOutlinePrinter className="icon" />,
     title: "Impressoras",
-    subtitle: "Impressoras",
+    subtitle: "Visão geral, entrada em estoque e gerenciamento",
   };
 
   return (
