@@ -26,24 +26,22 @@ import * as Hi from "react-icons/hi";
 import * as Ri from "react-icons/ri";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/auth";
+import PrtManager from "./components/PrinterManager";
 
 import Header from "../template/Header";
 
-const Navigation = () => {
-  
+const Navigation = (props) => {
   const [active, setActive] = useState("default");
 
-  const screenSwitcher = () => {
+  const screenSwitcher = (props) => {
     switch (active) {
       case "default":
+        return <PrtManager />;
+      case "production":
         return <Dashboard />;
-        break;
-
       case "entrada":
         // return <ToastNotifications message="Oi" />;
         return <FormEntradaPRT />;
-        break;
-
       default:
         return null;
     }
@@ -58,13 +56,16 @@ const Navigation = () => {
         onSelect={(selectedKey) => setActive(selectedKey)}
       >
         <Nav.Item>
-          <Nav.Link eventKey="default">Dashboard</Nav.Link>
+          <Nav.Link eventKey="default">Gerenciar</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="entrada">Entrada</Nav.Link>
+          <Nav.Link eventKey="entrada">Entrada em Estoque</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="history">Histórico</Nav.Link>
         </Nav.Item>
       </Nav>
-      {screenSwitcher()}
+      {screenSwitcher(props)}
     </>
   );
 };
@@ -460,7 +461,7 @@ const Dashboard = (event) => {
   );
 };
 
-const PrinterHomeV2 = () => {
+const PrinterHomeV2 = (props) => {
   const headerProps = {
     icon: <Hi.HiOutlinePrinter className="icon" />,
     title: "Impressoras",
