@@ -41,6 +41,14 @@ export const replacePrt = (props) => {
   return axios[method](url, printer);
 };
 
+export const movePrt = (props) => {
+  const baseUrl = `http://localhost:3333/${props.path}/${props.id}/move`;
+  const printer = props.obj;
+  const method = "post"
+  const url = baseUrl;
+  return axios[method](url, printer);
+};
+
 
 
 // export const save = (props) => {

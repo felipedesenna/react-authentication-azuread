@@ -1,11 +1,17 @@
-import React, { hashHistory, useState, useRef, useEffect } from "react";
+import React, {
+  hashHistory,
+  useState,
+  useRef,
+  useEffect,
+  Fragment,
+} from "react";
 import {
   Button,
   Form,
   Col,
   Modal,
   Card,
-  Fragment,
+  ButtonToolbar,
   ButtonGroup,
   ToggleButton,
 } from "react-bootstrap";
@@ -25,39 +31,36 @@ import { toast } from "react-toastify";
 import { range } from "lodash";
 import { useAuth } from "../../../hooks/auth";
 
-// const options = range(0, 1000).map(o => `Option ${o.toString()}`);
-
-const PrtReplace = (props) => {
+const PrtMove = (props) => {
   const { accountInfo } = useAuth();
   const [validated, setValidated] = useState(false);
   const formRef = useRef(null);
   const toastId = useRef(null);
   const [tkt_glpi, setTktGlpi] = useState();
   const [date_of_service, setDateOfService] = useState();
-  const [location, setLocation] = useState();
-  const [problem_reported, setProblemReported] = useState();
-  const [sn_printer_installed, setSNPrinterInstalled] = useState([]);
-  const [printer_connection_method, setConnMethodValue] = useState("");
+  const [printer_location_point_A, setPrinterLocationPointA] = useState();
+  const [printer_location_point_B, setPrinterLocationPointB] = useState();
+  const [sn_printer_point_B, setSNPrinterPointB] = useState([]);
+  const [printer_connection_method_point_A, setConnMethodPointA] = useState("");
+  const [printer_connection_method_point_B, setConnMethodPointB] = useState("");
 
-  const status_printer_removed = "DEFECT";
-  const status_printer_installed = "PRODUCTION";
   const last_technician_update = accountInfo.user.email;
 
   const prtList = props.prtList;
 
   function filterByID(obj) {
-    if ("sn" in obj && obj.sn === sn_printer_installed.toString()) {
+    if ("sn" in obj && obj.sn === sn_printer_point_B.toString()) {
       return true;
     }
   }
 
   function excludePrtFromOptionsList(obj) {
-    if ("status" in obj && obj.status === "BACKUP") {
+    if ("status" in obj && obj.status === "PRODUCTION") {
       return true;
     }
   }
 
-  const id_printer_installed = prtList
+  const id_printer_point_B = prtList
     .filter(filterByID)
     .map((id) => id.id)
     .toString();
@@ -66,7 +69,7 @@ const PrtReplace = (props) => {
     .filter(excludePrtFromOptionsList)
     .map((obj) => obj.sn)
     .filter((lista) => lista !== props.sn);
-    
+
   const lista = prtList.map((sn) => sn.sn);
 
   const radiosConnectionMethod = [
@@ -78,19 +81,19 @@ const PrtReplace = (props) => {
     const addFormLog = {
       tkt_glpi,
       date_of_service,
-      location,
-      problem_reported,
-      id_printer_installed,
-      printer_connection_method,
-      status_printer_removed,
-      status_printer_installed,
+      printer_location_point_A,
+      printer_location_point_B,
+      id_printer_point_B,
+      printer_connection_method_point_A,
+      printer_connection_method_point_B,
       last_technician_update,
     };
     const form = event.currentTarget;
-    if (form.checkValidity() === false || printer_connection_method === "" ) {
+    if (form.checkValidity() === false || printer_connection_method_point_A === "" || printer_connection_method_point_B === "" ) {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
+      console.log(addFormLog);
       Toast({
         type: "error",
         msg: "Preencha todos os campos",
@@ -99,25 +102,26 @@ const PrtReplace = (props) => {
     } else {
       setValidated(true);
       event.preventDefault();
-      APIConn.replacePrt({ path: "printers", obj: addFormLog, id: props.id })
-        .then((res) => {
-          switchToast(res.data);
-          props.updList();
-          props.onHide();
-        })
-        .catch((e) => {
-          Toast({
-            type: "error",
-            msg: "Bad Request",
-            i: Ri.RiCloseCircleFill,
-          });
-          console.log(e);
-        });
-      axiosToast({
-        tstId: toastId,
-        msg: `Aguarde...`,
-        i: Ri.RiLoader2Fill,
-      });
+      console.log(addFormLog);
+      // APIConn.replacePrt({ path: "printers", obj: addFormLog, id: props.id })
+      //   .then((res) => {
+      //     switchToast(res.data);
+      //     props.updList();
+      //     props.onHide();
+      //   })
+      //   .catch((e) => {
+      //     Toast({
+      //       type: "error",
+      //       msg: "Bad Request",
+      //       i: Ri.RiCloseCircleFill,
+      //     });
+      //     console.log(e);
+      //   });
+      // axiosToast({
+      //   tstId: toastId,
+      //   msg: `Aguarde...`,
+      //   i: Ri.RiLoader2Fill,
+      // });
     }
   };
 
@@ -161,15 +165,14 @@ const PrtReplace = (props) => {
       >
         <Form.Row>
           <Card.Title className="ml-1 mt-2 mb-4 text-muted">
-            Substituição por Avaria
+            Movimentação de Equipamentos
           </Card.Title>
         </Form.Row>
         <Form.Row>
           <Form.Group as={Col} md="6" controlId="tktGLPI">
             <Form.Label>Ticket GLPI</Form.Label>
             <Form.Control
-              type="number"
-              min={16000}
+              type="text"
               required
               onChange={(e) => {
                 setTktGlpi(e.target.value);
@@ -189,49 +192,39 @@ const PrtReplace = (props) => {
             />
           </Form.Group>
         </Form.Row>
+
+        <hr />
         <Form.Row>
-          <Form.Group as={Col} md="12" controlId="place">
+          <h5 className="ml-1 mt-2 mb-4 text-muted">Ponto A</h5>
+        </Form.Row>
+
+        <Form.Row>
+          <Form.Group as={Col} md="4" controlId="sn_printer_point_A">
+            <Form.Label>S/N</Form.Label>
+            <Form.Control
+              type="text"
+              required
+              placeholder="Digite o Setor..."
+              value={props.sn}
+              disabled
+            />
+          </Form.Group>
+          <Form.Group as={Col} md="5" controlId="location_printer_point_A">
             <Form.Label>Setor</Form.Label>
             <Form.Control
               type="text"
               required
               onChange={(e) => {
-                setLocation(e.target.value);
+                setPrinterLocationPointA(e.target.value);
               }}
-              placeholder="Digite o Setor..."
+              placeholder="Digite o setor de origem..."
             />
           </Form.Group>
-        </Form.Row>
-        <Form.Row>
-          <Form.Group as={Col} md="12" controlId="problemFound">
-            <Form.Label>Problema apresentado</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              required
-              onChange={(e) => {
-                setProblemReported(e.target.value);
-              }}
-              placeholder="Descreva o defeito apresentado..."
-            />
-          </Form.Group>
-        </Form.Row>
-        <br />
-
-        <Form.Row>
-          <Form.Group as={Col} md="9" controlId="snNewPrinter">
-            <Form.Label>S/N do novo equipamento</Form.Label>
-            <Typeahead
-              id="basic-typeahead-single"
-              labelKey="name"
-              onChange={setSNPrinterInstalled}
-              options={options}
-              placeholder="Selecione o S/N do equipamento instalado..."
-              selected={sn_printer_installed}
-              inputProps={{ required: true }}
-            />
-          </Form.Group>
-          <Form.Group as={Col} md="3" controlId="sector">
+          <Form.Group
+            as={Col}
+            md="3"
+            controlId="connection_method_printer_point_A"
+          >
             <Form.Label>Conexão</Form.Label>
             <div className="d-flex justify-content-center flex-fill">
               <ButtonGroup
@@ -244,8 +237,65 @@ const PrtReplace = (props) => {
                     type="radio"
                     name="radio"
                     value={radio.value}
-                    checked={printer_connection_method === radio.value}
-                    onChange={(e) => setConnMethodValue(e.currentTarget.value)}
+                    checked={printer_connection_method_point_A === radio.value}
+                    onChange={(e) => setConnMethodPointA(e.currentTarget.value)}
+                    variant="outline-primary"
+                  >
+                    {radio.name}
+                  </ToggleButton>
+                ))}
+              </ButtonGroup>
+            </div>
+          </Form.Group>
+        </Form.Row>
+        <hr />
+        <Form.Row>
+          <h5 className="ml-1 mt-2 mb-4 text-muted">Ponto B</h5>
+        </Form.Row>
+
+        <Form.Row>
+          <Form.Group as={Col} md="4" controlId="sn_printer_point_B">
+            <Form.Label>S/N</Form.Label>
+            <Typeahead
+              id="basic-typeahead-single"
+              labelKey="name"
+              onChange={setSNPrinterPointB}
+              options={options}
+              placeholder="Selecione o S/N do equipamento instalado..."
+              selected={sn_printer_point_B}
+              inputProps={{ required: true }}
+            />
+          </Form.Group>
+          <Form.Group as={Col} md="5" controlId="location_printer_point_B">
+            <Form.Label>Setor</Form.Label>
+            <Form.Control
+              type="text"
+              required
+              onChange={(e) => {
+                setPrinterLocationPointB(e.target.value);
+              }}
+              placeholder="Digite o setor de destino..."
+            />
+          </Form.Group>
+          <Form.Group
+            as={Col}
+            md="3"
+            controlId="connection_method_printer_point_B"
+          >
+            <Form.Label>Conexão</Form.Label>
+            <div className="d-flex justify-content-center flex-fill">
+              <ButtonGroup
+                className="d-flex justify-content-center flex-fill"
+                toggle
+              >
+                {radiosConnectionMethod.map((radio, index) => (
+                  <ToggleButton
+                    key={index}
+                    type="radio"
+                    name="radio"
+                    value={radio.value}
+                    checked={printer_connection_method_point_B === radio.value}
+                    onChange={(e) => setConnMethodPointB(e.currentTarget.value)}
                     variant="outline-primary"
                   >
                     {radio.name}
@@ -270,4 +320,4 @@ const PrtReplace = (props) => {
   );
 };
 
-export default PrtReplace;
+export default PrtMove;

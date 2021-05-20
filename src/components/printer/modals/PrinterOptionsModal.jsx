@@ -11,26 +11,41 @@ import { toast } from "react-toastify";
 import "./PrinterOptionsModal.css";
 
 import PrtReplace from "../components/PrinterReplace";
+import PrtMove from "../components/PrinterMove";
 
 export const PrtModOptions = (props) => {
   const [active, setActive] = useState(false);
   const [submit, setSubmit] = useState();
   const [list, setList] = useState([]);
+  const [disableReplaceOption, setDisableReplaceOption] = useState(false);
 
+  // const LoadPrtReplace = (props) => {
+  //   console.log(props.status);
+  //   setDisableReplaceOption(true);
+  //   if (active === "replace") {
+  //     if (props.status === "DEFECT") {
+  //       return (
+  //         <div>
+  //           <h4>
+  //             Equipamento com defeito, não é possível realizar substituição.
+  //           </h4>
+  //         </div>
+  //       );
+  //     } else {
+  //       // setDisableReplaceOption(false);
+  //       return <PrtReplace {...props} />;
+  //     }
+  //   } else {
+  //     return null;
+  //   }
+  // };
   const LoadPrtReplace = (props) => {
-    console.log(props);
     if (active === "replace") {
-      if (props.status === "DEFECT") {
-        return (
-          <div>
-            <h4>
-              Equipamento com defeito, não é possível realizar substituição.
-            </h4>
-          </div>
-        );
-      } else {
-        return <PrtReplace {...props} />;
-      }
+      // setDisableReplaceOption(false);
+      return <PrtReplace {...props} />;
+    } else if (active === "move") {
+      // setDisableReplaceOption(false);
+      return <PrtMove {...props} />;
     } else {
       return null;
     }
@@ -56,18 +71,42 @@ export const PrtModOptions = (props) => {
         <Card bg="light">
           <Card.Header>
             <Nav
+              justify
               variant="pills"
               activeKey={active}
               onSelect={(selectedKey) => setActive(selectedKey)}
             >
               <Nav.Item>
-                <Nav.Link eventKey="replace">Substituição</Nav.Link>
+                <Nav.Link
+                  disabled={
+                    props.status === "DEFECT" || props.status === "BACKUP"
+                      ? true
+                      : false
+                  }
+                  eventKey="replace"
+                >
+                  Substituição
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="move">Movimentação</Nav.Link>
+                <Nav.Link
+                  disabled={
+                    props.status === "DEFECT" || props.status === "BACKUP"
+                      ? true
+                      : false
+                  }
+                  eventKey="move"
+                >
+                  Movimentação
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="repair">Reparo</Nav.Link>
+                <Nav.Link
+                  disabled={props.status === "DEFECT" ? true : false}
+                  eventKey="repair"
+                >
+                  Reparo
+                </Nav.Link>
               </Nav.Item>
             </Nav>
           </Card.Header>

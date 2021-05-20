@@ -20,7 +20,7 @@ import Toast, {
   axiosToast,
   axiosToastUpdate,
 } from "../Notifications/NotificationProvider";
-import Modal, { MyVerticallyCenteredModal } from "./modals/PrinterEditModal";
+import Modal, { PrtModEdit } from "./modals/PrinterEditModal";
 import { PrtModOptions } from "./modals/PrinterOptionsModal";
 import * as Hi from "react-icons/hi";
 import * as Ri from "react-icons/ri";
@@ -310,7 +310,6 @@ const Dashboard = (event) => {
     prtListAPI();
   }, []);
 
-  console.log(prt);
 
   const prtListAPI = () => {
     APIConn.getPrtList({ path: "printers" })
@@ -371,7 +370,7 @@ const Dashboard = (event) => {
     console.log(obj);
 
     return (
-      <MyVerticallyCenteredModal
+      <PrtModEdit
         show={prtModEditShow}
         onHide={() => setPrtModEditShow(false)}
       />
@@ -379,7 +378,6 @@ const Dashboard = (event) => {
   };
 
   const renderRows = (list, index) => {
-    console.log(list);
     return (
       <tr key={index}>
         <td>{list.id}</td>
@@ -388,7 +386,7 @@ const Dashboard = (event) => {
         <td>{list.manufacturer}</td>
         <td>{list.status}</td>
         <td>
-          <button
+          <Button
             className="btn btn-outline-primary mr-2"
             onClick={() => {
               setPrtOptEditShow(true);
@@ -396,7 +394,8 @@ const Dashboard = (event) => {
             }}
           >
             <i className="fa fa-wrench"></i>
-          </button>
+          </Button>
+
           <button
             className="btn btn-outline-primary"
             onClick={() => {
@@ -406,6 +405,7 @@ const Dashboard = (event) => {
           >
             <i className="fa fa-pencil"></i>
           </button>
+
           <button
             className="btn btn-outline-danger ml-2"
             onClick={() => delPrtAPI(list)}
@@ -435,7 +435,7 @@ const Dashboard = (event) => {
           {list.map(renderRows)}
         </tbody>
       </Table>
-      <MyVerticallyCenteredModal
+      <PrtModEdit
         show={prtModEditShow}
         onHide={() => setPrtModEditShow(false)}
         id={prt.id}

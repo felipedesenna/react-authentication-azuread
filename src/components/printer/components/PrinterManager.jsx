@@ -29,7 +29,7 @@ import * as Ri from "react-icons/ri";
 import { toast } from "react-toastify";
 import { range } from "lodash";
 import { useAuth } from "../../../hooks/auth";
-import Modal, { MyVerticallyCenteredModal } from "../modals/PrinterEditModal";
+import Modal, { PrtModEdit } from "../modals/PrinterEditModal";
 import { PrtModOptions } from "../modals/PrinterOptionsModal";
 
 const arr = ["PRODUCTION", "BACKUP", "DEFECT", "COLLECTED"];
@@ -122,23 +122,21 @@ const PrtManager = (props) => {
               className="btn btn-outline-primary mr-2"
               onClick={() => {
                 setPrtOptEditShow(true);
-                console.log(prtOptEditShow);
-                console.log(list);
                 setSelectedPrt(list);
               }}
               // onClick={() => {
               //   setPrtOptEditShow(true);
               //   setPrt(list);
               // }}
+              disabled={list.status === "DEFECT" ? true : false}
             >
               <i className="fa fa-wrench"></i>
             </button>
             <button
               className="btn btn-outline-primary"
               onClick={() => {
+                setSelectedPrt(list);
                 setPrtModEditShow(true);
-                console.log(prtOptEditShow);
-                console.log("oi");
                 // setPrt(list);
               }}
             >
@@ -176,16 +174,16 @@ const PrtManager = (props) => {
             {props.statusGetSelected && props.statusGetSelected.map(renderRows)}
           </tbody>
         </Table>
-        {/* <MyVerticallyCenteredModal
-                            show={prtModEditShow}
-                            onHide={() => setPrtModEditShow(false)}
-                            id={prt.id}
-                            sn={prt.sn}
-                            model={prt.model}
-                            manufacturer={prt.manufacturer}
-                            type={prt.type}
-                            updList={updPrtListAPI}
-                          />*/}
+        <PrtModEdit
+          show={prtModEditShow}
+          onHide={() => setPrtModEditShow(false)}
+          id={selectedPrt.id}
+          sn={selectedPrt.sn}
+          model={selectedPrt.model}
+          manufacturer={selectedPrt.manufacturer}
+          type={selectedPrt.type}
+          updList={PrtListAPI}
+        />
         <PrtModOptions
           show={prtOptEditShow}
           onHide={() => setPrtOptEditShow(false)}

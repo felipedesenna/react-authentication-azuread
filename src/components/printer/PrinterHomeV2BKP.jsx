@@ -20,7 +20,7 @@ import Toast, {
   axiosToast,
   axiosToastUpdate,
 } from "../Notifications/NotificationProvider";
-import Modal, { MyVerticallyCenteredModal } from "./modals/PrinterEditModal"
+import Modal, { PrtModEdit } from "./modals/PrinterEditModal";
 import * as Hi from "react-icons/hi";
 import * as Ri from "react-icons/ri";
 import { toast } from "react-toastify";
@@ -123,7 +123,7 @@ const FormEntradaPRT = (event) => {
           tstId: toastId,
           msg: `Equipamento Cadastrado com Sucesso`,
           i: Ri.RiCheckboxCircleFill,
-          type: toast.TYPE.SUCCESS
+          type: toast.TYPE.SUCCESS,
         });
         handleReset();
         break;
@@ -132,7 +132,7 @@ const FormEntradaPRT = (event) => {
           tstId: toastId,
           msg: `Equipamento '${res.printer.sn}' já consta cadastrado na base`,
           i: Ri.RiAlertFill,
-          type: toast.TYPE.ERROR
+          type: toast.TYPE.ERROR,
         });
         break;
 
@@ -304,8 +304,8 @@ const Dashboard = (event) => {
           tstId: toastId,
           msg: `Lista carregada`,
           i: Ri.RiCheckboxCircleFill,
-          type: toast.TYPE.SUCCESS
-        })
+          type: toast.TYPE.SUCCESS,
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -337,7 +337,7 @@ const Dashboard = (event) => {
           i: Ri.RiCheckboxCircleFill,
           type: toast.TYPE.SUCCESS,
         });
-        updPrtListAPI()
+        updPrtListAPI();
       })
       .catch((e) => {
         console.log(e);
@@ -354,12 +354,7 @@ const Dashboard = (event) => {
     alert(modalShow);
     console.log(obj);
 
-    return (
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
-    )
+    return <PrtModEdit show={modalShow} onHide={() => setModalShow(false)} />;
   };
 
   const renderRows = (list, index) => {
@@ -370,11 +365,13 @@ const Dashboard = (event) => {
         <td>{list.model}</td>
         <td>{list.manufacturer}</td>
         <td>
-          <button className="btn btn-warning"
+          <button
+            className="btn btn-warning"
             onClick={() => {
-              setModalShow(true)
-              setPrt(list)
-            }}>
+              setModalShow(true);
+              setPrt(list);
+            }}
+          >
             <i className="fa fa-pencil"></i>
           </button>
           <button
@@ -405,7 +402,7 @@ const Dashboard = (event) => {
           {list.map(renderRows)}
         </tbody>
       </Table>
-      <MyVerticallyCenteredModal
+      <PrtModEdit
         show={modalShow}
         onHide={() => setModalShow(false)}
         id={prt.id}
@@ -415,7 +412,6 @@ const Dashboard = (event) => {
         type={prt.type}
         updList={updPrtListAPI}
       />
-
     </>
   );
 };
