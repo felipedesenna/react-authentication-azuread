@@ -1,27 +1,8 @@
-import React, {
-  hashHistory,
-  useState,
-  useRef,
-  useEffect,
-  Fragment,
-} from "react";
-import {
-  Button,
-  Form,
-  Col,
-  Card,
-  InputGroup,
-  Badge,
-  Table,
-} from "react-bootstrap";
-import {
-  Typeahead,
-  Highlighter,
-  Menu,
-  MenuItem,
-} from "react-bootstrap-typeahead";
+import React, { useState, useRef, useEffect, Fragment } from "react";
+import { Button, Form, Col, Card, Table } from "react-bootstrap";
+import { Typeahead } from "react-bootstrap-typeahead";
 import * as APIConn from "../../api/ApiConnector";
-import Toast, {
+import {
   axiosToast,
   axiosToastUpdate,
 } from "../../Notifications/NotificationProvider";
@@ -115,7 +96,8 @@ const PrtManager = (props) => {
           <td>{list.sn}</td>
           <td>{list.model}</td>
           <td>{list.manufacturer}</td>
-          <td>{list.status}</td>
+          <td>{list.location}</td>
+          <td>{list.printer_connection_method}</td>
           <td>{list.status}</td>
           <td>
             <button
@@ -124,10 +106,6 @@ const PrtManager = (props) => {
                 setPrtOptEditShow(true);
                 setSelectedPrt(list);
               }}
-              // onClick={() => {
-              //   setPrtOptEditShow(true);
-              //   setPrt(list);
-              // }}
               disabled={list.status === "DEFECT" ? true : false}
             >
               <i className="fa fa-wrench"></i>
@@ -163,6 +141,7 @@ const PrtManager = (props) => {
               <th>Modelo</th>
               <th>Fabricante</th>
               <th>Localização</th>
+              <th>Modo de Conexão</th>
               <th>Status</th>
               <th>Ações</th>
             </tr>
@@ -194,7 +173,7 @@ const PrtManager = (props) => {
           manufacturer={selectedPrt.manufacturer}
           type={selectedPrt.type}
           status={selectedPrt.status}
-          //   updList={updselectedPrtListAPI}
+          updList={PrtListAPI}
           prtList={printerList}
         />
       </>

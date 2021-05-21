@@ -38,9 +38,6 @@ const PrtReplace = (props) => {
   const [problem_reported, setProblemReported] = useState();
   const [sn_printer_installed, setSNPrinterInstalled] = useState([]);
   const [printer_connection_method, setConnMethodValue] = useState("");
-
-  const status_printer_removed = "DEFECT";
-  const status_printer_installed = "PRODUCTION";
   const last_technician_update = accountInfo.user.email;
 
   const prtList = props.prtList;
@@ -66,7 +63,7 @@ const PrtReplace = (props) => {
     .filter(excludePrtFromOptionsList)
     .map((obj) => obj.sn)
     .filter((lista) => lista !== props.sn);
-    
+
   const lista = prtList.map((sn) => sn.sn);
 
   const radiosConnectionMethod = [
@@ -82,12 +79,12 @@ const PrtReplace = (props) => {
       problem_reported,
       id_printer_installed,
       printer_connection_method,
-      status_printer_removed,
-      status_printer_installed,
+      status_printer_removed: "DEFECT",
+      status_printer_installed: "PRODUCTION",
       last_technician_update,
     };
     const form = event.currentTarget;
-    if (form.checkValidity() === false || printer_connection_method === "" ) {
+    if (form.checkValidity() === false || printer_connection_method === "") {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
@@ -99,11 +96,13 @@ const PrtReplace = (props) => {
     } else {
       setValidated(true);
       event.preventDefault();
+      console.log(props);
       APIConn.replacePrt({ path: "printers", obj: addFormLog, id: props.id })
         .then((res) => {
           switchToast(res.data);
-          props.updList();
-          props.onHide();
+          // props.updList();
+          // props.onHide();
+          // handleReset();
         })
         .catch((e) => {
           Toast({
@@ -135,7 +134,6 @@ const PrtReplace = (props) => {
           i: Ri.RiCheckboxCircleFill,
           type: toast.TYPE.SUCCESS,
         });
-        handleReset();
         break;
       case 111:
         axiosToastUpdate({

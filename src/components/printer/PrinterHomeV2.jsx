@@ -79,7 +79,6 @@ const FormEntradaPRT = (event) => {
   const [model, setModel] = useState();
   const [manufacturer, setManufacturer] = useState();
   const [type, setType] = useState();
-  const status = "BACKUP";
   const last_technician_update = accountInfo.user.email;
 
   const handleSubmit = (event) => {
@@ -88,9 +87,12 @@ const FormEntradaPRT = (event) => {
       model,
       manufacturer,
       type,
-      status,
+      status: "BACKUP",
+      location: "Sala TI",
+      printer_connection_method: "NOT IN USE",
       last_technician_update,
     };
+    console.log(addFormLog);
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -310,7 +312,6 @@ const Dashboard = (event) => {
     prtListAPI();
   }, []);
 
-
   const prtListAPI = () => {
     APIConn.getPrtList({ path: "printers" })
       .then((res) => {
@@ -365,24 +366,13 @@ const Dashboard = (event) => {
     });
   };
 
-  const consoleTeste = (obj) => {
-    alert(prtModEditShow);
-    console.log(obj);
-
-    return (
-      <PrtModEdit
-        show={prtModEditShow}
-        onHide={() => setPrtModEditShow(false)}
-      />
-    );
-  };
-
   const renderRows = (list, index) => {
     return (
       <tr key={index}>
         <td>{list.id}</td>
         <td>{list.sn}</td>
         <td>{list.model}</td>
+        <td>{list.manufacturer}</td>
         <td>{list.manufacturer}</td>
         <td>{list.status}</td>
         <td>
