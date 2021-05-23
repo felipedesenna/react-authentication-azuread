@@ -12,6 +12,7 @@ import "./PrinterOptionsModal.css";
 
 import PrtReplace from "../components/PrinterReplace";
 import PrtMove from "../components/PrinterMove";
+import PrtRepair from "../components/PrinterRepair";
 
 export const PrtModOptions = (props) => {
   const [active, setActive] = useState(false);
@@ -46,6 +47,9 @@ export const PrtModOptions = (props) => {
     } else if (active === "move") {
       // setDisableReplaceOption(false);
       return <PrtMove {...props} />;
+    } else if (active === "repair") {
+      // setDisableReplaceOption(false);
+      return <PrtRepair {...props} />;
     } else {
       return null;
     }
@@ -102,7 +106,11 @@ export const PrtModOptions = (props) => {
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link
-                  disabled={props.status === "DEFECT" ? true : false}
+                  disabled={
+                    props.status === "DEFECT"
+                      ? true
+                      : false
+                  }
                   eventKey="repair"
                 >
                   Reparo
@@ -132,7 +140,6 @@ export const FormEditPrt = (props) => {
   const [model, setModel] = useState(props.model);
   const [manufacturer, setManufacturer] = useState(props.manufacturer);
   const [type, setType] = useState(props.type);
-  console.log(props);
 
   const handleSubmit = (event) => {
     const addFormLog = { sn, model, manufacturer, type };

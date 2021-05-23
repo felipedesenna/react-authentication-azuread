@@ -92,7 +92,6 @@ const FormEntradaPRT = (event) => {
       printer_connection_method: "NOT IN USE",
       last_technician_update,
     };
-    console.log(addFormLog);
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();

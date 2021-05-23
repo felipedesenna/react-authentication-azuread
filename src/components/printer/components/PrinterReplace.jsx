@@ -96,13 +96,12 @@ const PrtReplace = (props) => {
     } else {
       setValidated(true);
       event.preventDefault();
-      console.log(props);
       APIConn.replacePrt({ path: "printers", obj: addFormLog, id: props.id })
         .then((res) => {
           switchToast(res.data);
-          // props.updList();
-          // props.onHide();
-          // handleReset();
+          props.updList();
+          props.onHide();
+          handleReset();
         })
         .catch((e) => {
           Toast({
@@ -159,7 +158,7 @@ const PrtReplace = (props) => {
       >
         <Form.Row>
           <Card.Title className="ml-1 mt-2 mb-4 text-muted">
-            Substituição por Avaria
+            Substituição por avaria
           </Card.Title>
         </Form.Row>
         <Form.Row>
