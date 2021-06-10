@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { useAuth } from '../../hooks/auth';
 
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/images/logotriangle.svg';
 import '../../assets/styles.css';
 
 const SignIn = () => {
@@ -20,7 +20,9 @@ const SignIn = () => {
     <div className="App">
       <img src={logo} alt="ReactJS, Azure AD" className="App-logo" />
 
-      <button type="button" onClick={handleSignIn}>Entrar</button>
+      <button type="button" onClick={handleSignIn}>Entrar com AzureAD
+      
+       </button>
     </div>
   );
 };

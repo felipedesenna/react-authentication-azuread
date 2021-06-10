@@ -1,0 +1,108 @@
+:root {
+    --bg-dark: #d3d3d3;
+
+    --logo-height: 100px;
+    --header-height: 100px;
+    --menu-top-height: 50px;
+    --aside-width: 225px;
+    --footer-height: 30px;
+
+    --shadow:
+    0 2px 23px 0 rgba(0,0,0,0.1),
+    0 2px 49px 0 rgba(0,0,0,0.06);
+    
+    --shadow-menu:
+    /* 2px 0 10px 0 rgba(0,0,0,0.12); */
+    2px 0 15px 0 rgba(0,0,0,0.09);
+
+    --nav-hover:
+    linear-gradient(135deg, #ff6600 0%, #ff6600 100%);
+
+}
+
+*{
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Layout em Grid */
+
+.app {
+    margin: 0px;
+    display: grid;
+    grid-template-columns: var(--aside-width) 1fr;
+    grid-template-rows: 
+        var(--header-height)
+        1fr
+        var(--footer-height);
+    grid-template-areas:
+        "logo header"
+        "menu content"
+        "menu footer";
+
+    height: 100vh;
+    background-color: #F5F5F5;
+}
+
+aside.logo{
+    grid-area: logo;
+}
+
+header.header{
+    grid-area: header;
+    color: #666;
+    
+}
+
+aside.menu-area{
+    grid-area: menu;
+}
+
+main.content{
+    grid-area: content;
+    color: #666;
+}
+
+footer.footer{
+    grid-area: footer;
+}
+
+.icon {
+    color: #ff6600;
+    margin-bottom: 5px;
+}
+
+@media(max-width: 768px) {
+    .app{
+        grid-template-rows: 
+            var(--header-height)
+            var(--menu-top-height)
+            1fr
+            var(--footer-height);
+        grid-template-columns: 
+            var(--aside-width)
+            1fr;
+            grid-template-areas: 
+            "logo header"
+            "menu menu"
+            "content content"
+            "footer footer";
+    }
+}
+
+@media(max-width: 576px) {
+.app {
+    grid-template-rows: 
+        var(--logo-height)
+        var(--menu-top-height)
+        1fr
+        var(--footer-height);
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+        "logo"
+        "menu"
+        "content"
+        "footer";
+
+}
+}
